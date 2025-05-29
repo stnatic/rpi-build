@@ -1,0 +1,51 @@
+name: Build Raspberry Pi Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: install build dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y qemu-user-static
+        sudo apt install -y openssl
+
+    - name: build image
+      id: build
+      run: |
+        cd build
+        bash build-image.sh
+        echo "version=1.1-${GITHUB_SHA::6}" >> "$GITHUB_OUTPUT"
+
+    - name: create checksum
+      run: |
+        cd utilities/build/pi-gen/deploy
+        export image_filename=$(ls *-img.xz)
+        sha256sum ${image_filename} > ${image_filename}.sha256sum
+
+    - name: upload image
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.build.outputs.version }}
+        path: |
+          utilities/build/pi-gen/deploy/*.img.xz
+          utilities/build/pi-gen/deploy/*.img.xz.sha256sum
+        compression-level: 0
+
+    - name: create release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ steps.build.outputs.version }}
+        files: |
+          utilities/build/pi-gen/deploy/*.img.xz
+          utilities/build/pi-gen/deploy/*.img.xz.sha256sum
+        generate_release_notes: true
