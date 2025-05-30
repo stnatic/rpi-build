@@ -24,3 +24,7 @@ EOF
 
 install files/home/pi/disable-ssh-password-auth "${ROOTFS_DIR}/home/pi/"
 endinfo
+
+info "install k3s"
+curl -sfL https://get.k3s.io | sh -
+endinfo

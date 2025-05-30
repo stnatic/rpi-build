@@ -35,21 +35,3 @@ jobs:
         cd build/pi-gen/deploy
         export image_filename=$(ls *-img.xz)
         sha256sum ${image_filename} > ${image_filename}.sha256sum
-
-    - name: upload image
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ steps.build.outputs.version }}
-        path: |
-          build/pi-gen/deploy/*.img.xz
-          build/pi-gen/deploy/*.img.xz.sha256sum
-        compression-level: 0
-
-    - name: create release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ steps.build.outputs.version }}
-        files: |
-          build/pi-gen/deploy/*.img.xz
-          build/pi-gen/deploy/*.img.xz.sha256sum
-        generate_release_notes: true
