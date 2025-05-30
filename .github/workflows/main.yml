@@ -32,7 +32,7 @@ jobs:
 
     - name: create checksum
       run: |
-        cd utilities/build/pi-gen/deploy
+        cd build/pi-gen/deploy
         export image_filename=$(ls *-img.xz)
         sha256sum ${image_filename} > ${image_filename}.sha256sum
 
