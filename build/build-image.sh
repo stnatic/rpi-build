@@ -5,7 +5,7 @@ fi
 
 echo "updating pi-gen"; {
   test -d pi-gen || git clone https://github.com/RPi-Distro/pi-gen
-  if [[ "$(uname -m)" == "arm64" ]]
+  if [[ "$(uname -m)" == "arm64" || "$(uname -m)" == "aarch64" ]]
   then
     git -C pi-gen switch arm64
   fi
