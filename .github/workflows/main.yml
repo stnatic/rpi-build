@@ -41,8 +41,8 @@ jobs:
       with:
         name: ${{ steps.build.outputs.version }}
         path: |
-          utilities/build/pi-gen/deploy/*.img.xz
-          utilities/build/pi-gen/deploy/*.img.xz.sha256sum
+          build/pi-gen/deploy/*.img.xz
+          build/pi-gen/deploy/*.img.xz.sha256sum
         compression-level: 0
 
     - name: create release
@@ -50,6 +50,6 @@ jobs:
       with:
         tag_name: v${{ steps.build.outputs.version }}
         files: |
-          utilities/build/pi-gen/deploy/*.img.xz
-          utilities/build/pi-gen/deploy/*.img.xz.sha256sum
+          build/pi-gen/deploy/*.img.xz
+          build/pi-gen/deploy/*.img.xz.sha256sum
         generate_release_notes: true
